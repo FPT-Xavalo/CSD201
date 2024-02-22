@@ -1,0 +1,170 @@
+//===========================================================================
+//(2)===YOU CAN EDIT OR EVEN ADD NEW FUNCTIONS IN THE FOLLOWING PART========
+//===========================================================================
+    
+    int depthFirst2(boolean visited[], int i, int count, int min, int max, RandomAccessFile f) throws Exception {
+        if (count >= min && count <= max) {
+            fvisit(i, f);
+        }
+        visited[i] = true;
+        int j;
+        for (j = 0; j < n; j++) {
+            if (a[i][j] > 0 && (!visited[j])) {
+                count = depthFirst2(visited, j, (count + 1), min, max, f);
+            }
+        }
+        return count;
+    }
+
+    //k la bat dau tu vetex nao 
+    void depthFirst2(int k, int min, int max, RandomAccessFile f) throws Exception {
+        int i;
+        boolean[] visited = new boolean[20];
+        for (i = 0; i < n; i++) {
+            visited[i] = false;
+        }
+        int count = depthFirst2(visited, k, 0, min, max, f);
+        for (i = 0; i < n; i++) {
+            if (!visited[i]) {
+                depthFirst2(visited, i, (count + 1), min, max, f);
+            }
+        }
+        System.out.println();
+    }
+
+    void f1() throws Exception {
+        loadData(1);
+        String fname = "f1.txt";
+        File g123 = new File(fname);
+        if (g123.exists()) {
+            g123.delete();
+        }
+        RandomAccessFile f = new RandomAccessFile(fname, "rw");
+        depth(1, f);
+        f.writeBytes("\r\n");
+        //-------------------------------------------------------------------------------------
+        /*You must keep statements pre-given in this function.
+       Your task is to insert statements here, just after this comment,
+       to complete the question in the exam paper.*/
+depthFirst2(1,0,4,f);
+        //-------------------------------------------------------------------------------------
+        f.writeBytes("\r\n");
+        f.close();
+    }
+//===========================================================================
+
+    void f2() throws Exception {
+        loadData(20);
+        String fname = "f2.txt";
+        File g123 = new File(fname);
+        if (g123.exists()) {
+            g123.delete();
+        }
+        RandomAccessFile f = new RandomAccessFile(fname, "rw");
+        f.writeBytes("\r\n");
+        //-------------------------------------------------------------------------------------
+        /*You must keep statements pre-given in this function.
+       Your task is to insert statements here, just after this comment,
+       to complete the question in the exam paper.*/
+        // You can use the statement fvisit(i,f); i = 0, 1, 2,...,n-1 to display the vertex i to file f2.txt 
+        //  and statement f.writeBytes(" " + k); to write  variable k to the file f2.txt  
+        eulerCycle(1,f);
+        //-------------------------------------------------------------------------------------
+        f.writeBytes("\r\n");
+        f.close();
+    }
+    boolean hasIsolated() {
+        for (int i = 0; i < n; i++) {
+            if (deg(i) == 0) {
+                return (true);
+            }
+        }
+        return (false);
+    }
+    
+    boolean isConnected() {
+        boolean[] p = new boolean[n];
+        int i, j, r;
+        for (i = 0; i < n; i++) {
+            p[i] = false;
+        }
+        Stack s = new Stack();
+        s.push(0);
+        p[0] = true;
+        while (!s.isEmpty()) {
+            r = s.pop();
+            for (i = 0; i < n; i++) {
+                if (!p[i] && a[r][i] > 0) {
+                    s.push(i);
+                    p[i] = true;
+                }
+            }
+        }
+        for (i = 0; i < n; i++) {
+            if (!p[i]) {
+                return (false);
+            }
+        }
+        return (true);
+    }
+    
+    boolean isUnDirected() {
+        int i, j;
+        for (i = 0; i < n; i++) {
+            for (j = 0; j < n; j++) {
+                if (a[i][j] != a[j][i]) {
+                    return (false);
+                }
+            }
+        }
+        return (true);
+    }
+    
+    boolean allDegEven() {
+        for (int i = 0; i < n; i++) {
+            if (deg(i) % 2 == 1) {
+                return (false);
+            }
+        }
+        return (true);
+    }
+    
+     boolean hasEulerCycle() {
+        if (!hasIsolated() && isUnDirected() && isConnected() && allDegEven()) {
+            return (true);
+        } else {
+            return (false);
+        }
+    }
+    
+    void eulerCycle(int fro, RandomAccessFile f) throws IOException {
+        if (!hasEulerCycle()) {
+            return;
+        }
+        int[] eu = new int[100];
+        int m, i, j, r;
+        Stack s = new Stack();
+        s.push(fro);
+        j = 0;
+        while (!s.isEmpty()) {
+            r = s.top();
+            for (i = 0; i < n; i++) {
+                if (a[r][i] > 0) {
+                    break;
+                }
+            }
+            if (i == n) {
+                s.pop();
+                eu[j++] = r;
+                
+            } else {
+                s.push(i);
+                a[r][i]--;
+                a[i][r]--;
+            }
+        }
+        m = j;
+        for (i = 0; i < m; i++) {
+            f.writeBytes(v[eu[i]] + " ");
+        }
+    }

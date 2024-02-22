@@ -1,0 +1,225 @@
+//===========================================================================
+//(2)===YOU CAN EDIT OR EVEN ADD NEW FUNCTIONS IN THE FOLLOWING PART========
+//===========================================================================
+      void addLast(Bell x) {//You should write here appropriate statements to complete this function.
+        Node q = new Node(x);
+        if (isEmpty()) {
+            head = tail = q;
+        } else {
+            tail.next = q;
+            tail = q;
+        }
+    }
+
+
+    void addLast(String xTower, int xSound, int xType) {
+        //You should write here appropriate statements to complete this function.        
+        if(xTower.charAt(0)=='A') return;
+    Bell x = new Bell(xTower,  xSound,xType);
+    addLast(x);
+    }
+
+    void f1() throws Exception {/* You do not need to edit this function. Your task is to complete the addLast  function
+        above only.
+         */
+        clear();
+        loadData(1);
+        String fname = "f1.txt";
+        File g123 = new File(fname);
+        if (g123.exists()) {
+            g123.delete();
+        }
+        RandomAccessFile f = new RandomAccessFile(fname, "rw");
+        ftraverse(f);
+        f.close();
+    }
+
+//==================================================================
+    void addFirst(Bell x) {
+        Node p = new Node(x);
+        if (isEmpty()) {
+            head = tail = p;
+            return;
+        }
+        p.next = head;
+        head = p;
+    }
+     void addAfter(Node p, Bell x) {
+        Node p1 = new Node(x);
+        if (isEmpty()) {
+            return;
+        }
+        p1.next = p.next;
+        p.next = p1;
+        if (p == tail) {
+            tail = p1;
+        }
+    }
+
+    void insert(Bell x, int index) {
+        int count = 0;
+        Node p = head;
+        while (p.next != null) {
+            if (index == 0) {
+                this.addFirst(x);
+                break;
+            }
+            if (count == index - 1) {
+                this.addAfter(p, x);
+                break;
+            }
+            count++;
+            p = p.next;
+        }
+    }
+    void f2() throws Exception {
+        clear();
+        loadData(5);
+        String fname = "f2.txt";
+        File g123 = new File(fname);
+        if (g123.exists()) {
+            g123.delete();
+        }
+        RandomAccessFile f = new RandomAccessFile(fname, "rw");
+        ftraverse(f);
+        Bell x = new Bell("X", 1, 2);
+        Bell y = new Bell("Y", 3, 4);
+        //------------------------------------------------------------------------------------
+        /*You must keep statements pre-given in this function.
+       Your task is to insert statements here, just after this comment,
+       to complete the question in the exam paper.*/
+        insert(y,2);
+        insert(x,4);
+        //------------------------------------------------------------------------------------
+        ftraverse(f);
+        f.close();
+    }    
+
+//==================================================================
+    int MaxAgeN() {
+        Node p = head;
+
+        int index = 0;
+
+        int max = p.info.type;
+        while (p.next != null) {
+            if (p.next.info.type > max) {
+                max = p.next.info.type;
+            }
+            p = p.next;
+        }
+        Node p1 = head;
+        while (p1.next != null) {
+            index++;
+            if (p1.info.type == max) {
+                break;
+            }
+            p1 = p1.next;
+        }
+
+        return index;
+    }
+void delNodeHaveValueX(int x) {
+        Node p = head;
+        int i = 0;
+        while (p != null) {
+            if (p.info.type == x) break;
+            i++;
+            p = p.next;
+        }
+        delPosition(i);
+    }
+    
+    void delPosition(int pos) {
+        // pos must != 0 and != size() - 1        
+        Node p = head;
+        while (pos-- > 1) {
+            p = p.next;
+        }
+        p.next = p.next.next;
+    }
+    
+
+    void f3() throws Exception {
+        clear();
+        loadData(9);
+        String fname = "f3.txt";
+        File g123 = new File(fname);
+        if (g123.exists()) {
+            g123.delete();
+        }
+        RandomAccessFile f = new RandomAccessFile(fname, "rw");
+        ftraverse(f);
+        //------------------------------------------------------------------------------------
+        /*You must keep statements pre-given in this function.
+       Your task is to insert statements here, just after this comment,
+       to complete the question in the exam paper.*/
+        delPosition(MaxAgeN());
+        //------------------------------------------------------------------------------------
+        ftraverse(f);
+        f.close();
+    }    
+
+//==================================================================
+    void f4() throws Exception {
+        clear();
+        loadData(13);
+        String fname = "f4.txt";
+        File g123 = new File(fname);
+        if (g123.exists()) {
+            g123.delete();
+        }
+        RandomAccessFile f = new RandomAccessFile(fname, "rw");
+        ftraverse(f);
+        //------------------------------------------------------------------------------------
+        /*You must keep statements pre-given in this function.
+       Your task is to insert statements here, just after this comment,
+       to complete the question in the exam paper.*/
+    
+        sort(indexLast()-4,indexLast());
+        //------------------------------------------------------------------------------------
+        ftraverse(f);
+        f.close();
+    }  
+     int indexLast() {
+        int index1 = 0;
+        Node p = head;
+        while (p.next != null) {
+            index1++;
+            p = p.next;
+        }
+        return index1;
+    }
+   
+     void sort(int startIndex, int endIndex) {       
+        int count = 0,m=0;
+        Bell tmp;
+        Node p = head,i;
+        while (p.next != null) {
+            if (count == startIndex) {
+                for (; p != null; p = p.next) {
+                    int n=0;
+                    for (i = p.next; i != null; i = i.next) {
+                        if (p.info.type < i.info.type) {
+                            tmp = p.info;
+                            p.info = i.info;
+                            i.info = tmp;
+                        }
+                        n++;
+                        if (m+n==endIndex-startIndex) {
+                            break;
+                        }
+                    }
+                    if (m+1==endIndex-startIndex) {
+                        break;
+                    }
+                    m++;
+                }
+                break;
+            }
+            count++;
+            p = p.next;
+        }
+    }
+
+   
